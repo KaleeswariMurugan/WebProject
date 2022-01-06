@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Weather Forecast</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href = "style.css">
+  <link rel="icon" href="web-image/title.jpg">
+</head>
+<body>
+<header>
+    <nav class="navbar"> 
+      <input type="checkbox" id="check">
+      <label for="check" class="checkbtn"></label>
+      <label class="logo">My WebPage</label>
+     <ul>
+        <li><a class="active" href="welcome.html">Home</a></li>
+     </ul>
+  </nav>
+ </header>
+    
+  <div class= "nav-con">
+   <div class="nav-bar">
+     <img src="web-image/cloudy.jpg" width="140px" height="90px">
+   </div>
+ <!--nav-bar end----->
+ </div>
+ <!---nav-con end---------->
+  <div class="container">
+   <div class ="interface">
+        <img src="web-image/search.jpg"  width="40px" height="40px">
+        <input type="text" id="place" placeholder="Search city,Place">
+        <button onclick="weather(document.querySelector('#place').value)">Get Update</button>
+        <h5>Current Date and Time is <br/><span id='date-time'></span></h5>
+        <h1>Different kind of Weather</h1>
+        <h1>inside of 24/7 hours</h1>
+      <div class="news">
+         <p>Sunshine is delicious, rain is refreshing,</p>
+         <p>wind braces us up, snow is exhilarating;</p>
+         <p>there is really no such thing as bad weather,</p>
+         <p>only different kinds of good weather.</p>
+      </div>
+   <!---news end---------->
+     </div>
+   <!----interface end------->
+     <div class="info">
+       <div class="header">
+            <h1>Today weather Report</h1>
+        </div>
+  <!----header end------------------->
+    <div class="report">
+        <img src="web-image/NA.jpg" id="weather"  class="img-rounded" width="200px" height="100px">
+        <span  id="description"></span>
+    </div>
+      <div class="output">
+       <div class="digit">
+         <h1 id="deg">0&deg;C</h1>
+         <span id="min">0&deg;C</span>
+         <span id="max">/ 0&deg;F</span>
+    </div>
+    <!----digit end----->
+      <div class="list_info">
+           <h3 id="wind">0 mph</h3>
+           <h3 id="humidity">0 %</h3>
+      </div>
+      <!----list_info end----->
+
+    </div>
+ <!----output end---->
+     <div class="convertor">
+        <span id ="celsius" onclick="con('celsius')">&deg;C</span>
+        <span id ="fahrenheit" onclick="con('fahrenheit')">| &deg;F</span>
+     </div>
+     <!---convertor end----->  
+   </div>
+  <!----info end------->
+</div>
+<script type="text/javascript">
+var temp,
+maxtemp,
+mintemp,
+desc,
+wind,
+hum,
+main,
+day,night;
+
+var x=["clear sky","few clouds","scattered clouds","tornado","shower rain","mist","thunderstrom","rain","snow","haze","broken clouds","drizzle"];
+ function weather(input){
+    var city= input;
+    var myurl="http://api.openweathermap.org/data/2.5/weather?";
+    var key="0cfd0ef2eae651bc05d578b56ab26ffe";
+    var url=myurl+"appid="+key+"&units=metric&q="+city;
+    fetch(url)
+    .then(function(response){
+    console.log(response);
+    return response.json();
+   })
+  .then(function(data) {
+   console.log(data);
+   temp=data.main.temp;
+   document.querySelector("#deg").innerHTML=Math.round(temp)+"&deg;C";
+   mintemp=data.main.temp_min;
+   document.querySelector("#min").innerHTML=Math.round(mintemp)+"&deg;C";
+   maxtemp=data.main.temp_max;
+   document.querySelector("#max").innerHTML="/"+Math.round(maxtemp)+"&deg;C";
+   wind=data.wind.speed;
+   document.querySelector("#wind").innerHTML=Math.round(wind)+"mph";
+   hum=data.main.humidity;
+   document.querySelector("#humidity").innerHTML=hum+"%";
+   desc=data.weather[0].description;
+   document.querySelector("#description").innerHTML=desc;
+   var dt = new Date();
+   document.getElementById('date-time').innerHTML=dt;
+    })
+  .catch(err=>document.write(err));
+ }
+   function con(detector){
+    if(detector=="fahrenheit"){
+     var far=(temp*9/5)+32;
+     document.querySelector("#deg").innerHTML=Math.round(far)+"&deg;F";
+     var farmin=(mintemp*9/5)+32;
+     document.querySelector("#min").innerHTML=Math.round(farmin)+"&deg;F";    
+     var farmax=(maxtemp*9/5)+32;
+     document.querySelector("#max").innerHTML="/"+Math.round(farmax)+"&deg;F";
+  }
+   else{
+     document.querySelector("#deg").innerHTML=Math.round(temp)+"&deg;C";
+     document.querySelector("#min").innerHTML=Math.round(mintemp)+"&deg;C";
+     document.querySelector("#max").innerHTML="/"+Math.round(maxtemp)+"&deg;C";
+}
+ }
+   </script>
+</body>
+</html>
